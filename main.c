@@ -92,7 +92,8 @@ main(int argc, char **argv)
 
         //文件锁获取成功
         list.prev = list.next = &list;
-        //从文件中读取内容，还原上次程序运行现场的tube list和job list
+        //从binglog.X文件中读取内容，并创建一个新的binglog.maxX+1
+        //还原上次程序运行现场的tube list和job list
         walinit(&srv.wal, &list);
         //重新扫描一遍job list，将各自对应的job放到适当的数据结构中，参见这个函数的注释
         //因为里面的Ready之类的是一个堆结构，所以只还原job list也是不够的
