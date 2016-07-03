@@ -53,7 +53,6 @@ srvserve(Server *s)
         twarn("listen");
         return;
     }
-    //这里打印也会报NULL指针printf("%p\n", sock);
     //在sockwant函数里把全局的server->sock传进去，并赋值给ev.data.ptr = s->sock;
     r = sockwant(&s->sock, 'r');
     if (r == -1) {
@@ -77,7 +76,7 @@ srvserve(Server *s)
         //这个值其实是在上面的sockwant里把全局的server->sock赋值给了ev.data.ptr
         //然后再从里面把ev.data.ptr取出来，赋给sock变量，不太清楚这么做的含义是什么
         int rw = socknext(&sock, period);
-        printf("%p\n", sock);
+        printf("调用socknext后得到的新sock地址：%p\n", sock);
 
         if (rw == -1) {
             twarnx("socknext");
@@ -85,12 +84,11 @@ srvserve(Server *s)
         }
 
         if (rw) {
-        	//s->sock和这里的临时变量sock是同一个地址
-        	//为什么需要这个临时变量呢？
-        	//因为sock的值本身也是从全局的srv->sock得来的
-        	//所以其实两者指向的是同一个地址
-        	printf("%p\n", sock);
-        	printf("%p\n", &(s->sock));
+        	//在accept时，这两个sock是同一个sock
+        	//但在读写事件时，这两个sock应该就不是同一个了
+        	//因为在accept时，会修改掉connection内部的sock的event的handler
+        	printf("局部变量sock：%p\n", sock);
+        	printf("全局变量sock：%p\n", &(s->sock));
         	sock->f(sock->x, rw);
 
         }

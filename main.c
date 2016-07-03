@@ -54,15 +54,13 @@ main(int argc, char **argv)
     //全局的job list
     //因为所有的tube共用同一个job list
     struct job list = {};
-    printf("%p socket addr in main \n", &(srv.sock));
 
     //进程名
     progname = argv[0];
     setlinebuf(stdout);
-    printf("%p socket addr in main \n", &(srv.sock));
 
     optparse(&srv, argv+1);
-    printf("%p socket addr in main \n", &(srv.sock));
+    printf("main函数中的全局sock：%p\n", &(srv.sock));
     //-V的话会输出
     if (verbose) {
         printf("pid %d\n", getpid());

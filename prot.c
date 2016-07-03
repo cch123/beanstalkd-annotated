@@ -1966,6 +1966,8 @@ h_accept(const int fd, const short which, Server *s)
     c->sock.f = (Handle)prothandle;
     c->sock.fd = cfd;
 
+    //在accept连接时，会把这个连接的handler修改掉，现在是prothandle
+    //而不是全局的socket的那个srvaccept了，需要注意
     r = sockwant(&c->sock, 'r');
     if (r == -1) {
         twarn("sockwant");
