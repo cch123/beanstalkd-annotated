@@ -85,8 +85,12 @@ srvserve(Server *s)
 
         if (rw) {
         	//在accept时，这两个sock是同一个sock
-        	//但在读写事件时，这两个sock应该就不是同一个了
+        	//但accept后，会建立一个新的socket，并得到新的fd
+        	//原来的socket还会用来做监听
+        	//所以只要有新的连接就会有新的socket和新的fd
+        	//在读写事件时，这两个sock就不是同一个了
         	//因为在accept时，会修改掉connection内部的sock的event的handler
+        	//所以读写时对应的是connection自己的socket和fd
         	printf("局部变量sock：%p\n", sock);
         	printf("全局变量sock：%p\n", &(s->sock));
         	sock->f(sock->x, rw);
