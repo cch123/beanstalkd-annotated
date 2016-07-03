@@ -1915,6 +1915,10 @@ h_accept(const int fd, const short which, Server *s)
     struct sockaddr_in6 addr;
 
     addrlen = sizeof addr;
+    //accept函数用于面向连接类型的套接字类型（SOCK_STREAM和SOCK_SEQPACKET）。
+    //accept函数将从连接请求队列中获得连接信息，创建新的套接字
+    //并返回该套接字的文件描述符。新创建的套接字用于服务器与客户机的通信
+    //而原来的套接字仍然处于监听状态。
     cfd = accept(fd, (struct sockaddr *)&addr, &addrlen);
     if (cfd == -1) {
         if (errno != EAGAIN && errno != EWOULDBLOCK) twarn("accept()");

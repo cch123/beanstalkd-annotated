@@ -315,6 +315,7 @@ int conn_ready(Conn *c);
 
 enum
 {
+	//10MB
     Filesizedef = (10 << 20)
 };
 
@@ -381,6 +382,9 @@ struct Server {
     char *addr;
     char *user;
 
+    //因为下面这些不是指针，所以初始化的时候就算你不指定值
+    //他们也会申请空间
+    //指针变量不初始化的话会为NULL的
     Wal    wal;
     Socket sock;
     Heap   conns;
