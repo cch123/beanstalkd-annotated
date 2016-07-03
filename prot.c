@@ -2068,8 +2068,10 @@ prot_replay(Server *s, job list)
         switch (j->r.state) {
         case Buried:
             bury_job(s, j, 0);
-            break; //这里为什么直接break了？难道碰到bury的job就不往后重放了么？
+            break; //break了switch，没退出循环orz
         case Delayed:
+        	//如果取到的是delay消息，还没到时间，那么需要重新计算一次delay时间
+        	//否则的话，认为是已经ready的消息(在enqueue_job里有处理)
             t = nanoseconds();
             if (t < j->r.deadline_at) {
                 delay = j->r.deadline_at - t;

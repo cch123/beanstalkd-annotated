@@ -191,10 +191,21 @@ walwrite(Wal *w, job j)
     int r = 0;
 
     if (!w->use) return 1;
+    //如果当前的文件中被使用的字节数=0，那么就使用下一个文件
+    //为什么呢
     if (w->cur->resv > 0 || usenext(w)) {
+    	//如果job对应的file不为空，那么说明这个job已经被写入到过之前的文件
+    	//参考一下读取时候的注释：
+    	// We read a short record without having seen a
+        // full record for this job, so the full record
+        // was in an earlier file that has been deleted.
+        // Therefore the job itself has either been
+        // deleted or migrated; either way, this record
+        // should be ignored.
         if (j->file) {
             r = filewrjobshort(w->cur, j);
         } else {
+        	//在写完整信息时会把j->file改成w->cur的
             r = filewrjobfull(w->cur, j);
         }
     }

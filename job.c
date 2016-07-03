@@ -37,6 +37,15 @@ store_job(job j)
     if (all_jobs_used > (all_jobs_cap << 2)) rehash(1);
 }
 
+//触发rehash的条件如下
+//store_job的时候
+/* accept a load factor of 4 */
+//if (all_jobs_used > (all_jobs_cap << 2)) rehash(1);
+//这样会触发升级策略
+//job_free->job_hash_free的时候
+//// Downscale when the hashmap is too sparse
+//if (all_jobs_used < (all_jobs_cap >> 4)) rehash(0);
+//这样会触发降级策略
 static void
 rehash(int is_upscaling)
 {
@@ -84,6 +93,8 @@ job_find(uint64 job_id)
     job jh = NULL;
     int index = _get_job_hash_index(job_id);
 
+    //虽然hashtable是求模得到的位置，但看起来同一个index下还是可能会有hash碰撞
+    //所以相同hash的job还是会挂在一个链表上吧
     for (jh = all_jobs[index]; jh && jh->r.id != job_id; jh = jh->ht_next);
 
     return jh;

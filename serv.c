@@ -84,7 +84,7 @@ srvserve(Server *s)
         }
 
         if (rw) {
-        	//在accept时，这两个sock是同一个sock
+        	//在accept前，这两个sock是同一个sock
         	//但accept后，会建立一个新的socket，并得到新的fd
         	//原来的socket还会用来做监听
         	//所以只要有新的连接就会有新的socket和新的fd

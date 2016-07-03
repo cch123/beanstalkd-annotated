@@ -215,6 +215,7 @@ readrec(File *f, job l, int *err)
                 goto Error;
             }
             t = tube_find_or_make(tubename);
+            //这里就已经会调用store_job来将job放到全局的hashtable里了
             j = make_job_with_id(jr.pri, jr.delay, jr.ttr, jr.body_size,
                                  t, jr.id);
             j->next = j->prev = j;

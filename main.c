@@ -95,6 +95,9 @@ main(int argc, char **argv)
         list.prev = list.next = &list;
         //从binglog.X文件中读取内容，并创建一个新的binglog.maxX+1
         //还原上次程序运行现场的tube list和job list
+        //以及全局的jobs hashtable
+        //walinit -> walread-> fileread -> readrec -> make_job_with_id
+        // -> store_job就会更新全局的hashtable了
         walinit(&srv.wal, &list);
         //重新扫描一遍job list，将各自对应的job放到适当的数据结构中，参见这个函数的注释
         //因为里面的Ready之类的是一个堆结构，所以只还原job list也是不够的

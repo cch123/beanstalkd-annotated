@@ -33,6 +33,7 @@ less(Heap *h, int a, int b)
 static void
 siftdown(Heap *h, int k)
 {
+	//上调堆元素，直到符合堆性质
     for (;;) {
         int p = (k-1) / 2; /* parent */
 

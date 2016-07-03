@@ -17,8 +17,12 @@ make_tube(const char *name)
     strncpy(t->name, name, MAX_TUBE_NAME_LEN - 1);
     if (t->name[MAX_TUBE_NAME_LEN - 1] != '\0') twarnx("truncating tube name");
 
+    //定义ready堆和delay堆的less函数，作为调整堆时的less函数依据
+    //ready堆用优先级定义less
     t->ready.less = job_pri_less;
+    //delay堆用delay定义less
     t->delay.less = job_delay_less;
+
     t->ready.rec = job_setheappos;
     t->delay.rec = job_setheappos;
     t->buried = (struct job) { };
@@ -91,6 +95,8 @@ tube_find(const char *name)
 tube
 tube_find_or_make(const char *name)
 {
+	//在全局的tubes中查找name
+	//如果查到了返回tube，没查到创建一个返回
     return tube_find(name) ? : make_and_insert_tube(name);
 }
 
