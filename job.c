@@ -93,7 +93,7 @@ job_find(uint64 job_id)
     job jh = NULL;
     int index = _get_job_hash_index(job_id);
 
-    //虽然hashtable是求模得到的位置，但看起来同一个index下还是可能会有hash碰撞
+    //虽然hashtable是求模得到的位置，同一个index下可能会有hash碰撞
     //所以相同hash的job还是会挂在一个链表上吧
     for (jh = all_jobs[index]; jh && jh->r.id != job_id; jh = jh->ht_next);
 
